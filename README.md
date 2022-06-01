@@ -1,16 +1,15 @@
 # golang-united-school-homework-6.1
 
-Inside this repo you can find boilerplate code with comments that describe expected behavior of methods.
+Внутри этого репозитория вы можете найти шаблонный код с комментариями, описывающими ожидаемое поведение методов.
 
-Prerequisite:
-- Execute commands
-  - `go mod init`
-  - `go mod tidy`
+Условие:
+- Выполнять команды
+  - `инициализировать мод`
+  - `приведи мод в порядок`
 
-Required to implement:
-- Calculate Area and Perimeter for shapes Circle, Triangle, Rectangle in `circle.go`, `triangle.go`, `rectangle.go` files.
-- Circle, Triangle, Rectangle must satisfy to Shape interface.
-- Methods for Box structure in `box.go` file.
+Требуется для реализации:
+- Вычислить площадь и периметр для фигур Circle, Triangle, Rectangle в файлах `circle.go`, `triangle.go`, `rectangle.go`.
+- Круг, Треугольник, Прямоугольник должны соответствовать интерфейсу Shape.
+- Методы структуры Box в файле `box.go`.
 
-Final solution must satisfy to provided unit tests in `box_test.go` file.
-
+Окончательное решение должно удовлетворять предоставленным модульным тестам в файле `box_test.go`.
