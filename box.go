@@ -30,12 +30,11 @@ func NewBox(shapesCapacity int) *box {
 func (b *box) AddShape(shape Shape) error {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	if len(b.shapes) >= b.shapesCapacity {
+	if len(b.shapes)+1 > b.shapesCapacity {
 		return valueOutOfRange
-
-	} else {
-		b.shapes = append(b.shapes, shape)
 	}
+	b.shapes = append(b.shapes, shape)
+
 	return nil
 }
 
@@ -44,26 +43,7 @@ func (b *box) AddShape(shape Shape) error {
 func (b *box) GetByIndex(i int) (Shape, error) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	if i > b.shapesCapacity {
-		return nil, valueOutOfRange
-	}
-	for idx, value := range b.shapes {
-		if idx == i {
-			if value == nil {
-				return nil, fmt.Errorf("GetByIndex:%s", valueNotFound)
-			}
-		}
-		return value, nil
-	}
-	return nil, nil
-}
-
-// ExtractByIndex позволяет получить фигуру по индексу и удаляет эту фигуру из списка.
-// если фигура по индексу не существует или индекс вышел за пределы диапазона, то возвращает ошибку
-func (b *box) ExtractByIndex(i int) (Shape, error) {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-	if i > b.shapesCapacity {
+	if i+1 > b.shapesCapacity {
 		return nil, valueOutOfRange
 	}
 	for idx, value := range b.shapes {
@@ -73,6 +53,30 @@ func (b *box) ExtractByIndex(i int) (Shape, error) {
 			}
 			return value, nil
 		}
+
+	}
+	return nil, nil
+}
+
+// ExtractByIndex позволяет получить фигуру по индексу и удаляет эту фигуру из списка.
+// если фигура по индексу не существует или индекс вышел за пределы диапазона, то возвращает ошибку
+func (b *box) ExtractByIndex(i int) (Shape, error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	if i+1 > b.shapesCapacity {
+		return nil, valueOutOfRange
+	}
+	for idx, value := range b.shapes {
+		if idx == i {
+			if value == nil {
+				return nil, fmt.Errorf("GetByIndex:%s", valueNotFound)
+
+			}
+			b.shapes = append(b.shapes[0:i], b.shapes[i+1:]...)
+			return value, nil
+
+		}
+
 	}
 	return nil, nil
 }
@@ -82,7 +86,7 @@ func (b *box) ExtractByIndex(i int) (Shape, error) {
 func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	if i > b.shapesCapacity {
+	if i+1 > b.shapesCapacity {
 		return nil, valueOutOfRange
 	}
 	for idx, value := range b.shapes {
